@@ -14,10 +14,6 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.json({ info: "Node.js, Express, and Postgres API" });
-});
-
 app.get("/users", (req, res) => {
   let users = userRepository.getUsers();
   res.json(users);
@@ -76,7 +72,7 @@ app.post("/review/", (req, res) => {
   res.json(reviewData);
 });
 
-app.post("/getAllSellers/", (req, res) => {
+app.post("/getAllSellers", (req, res) => {
   let sellers = userRepository.getAllSellers();
   res.json(sellers);
 });
