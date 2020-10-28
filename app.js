@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const port = 3000;
 const cookieParser = require("cookie-parser");
 const UserRepository = require("./repositories/user_repository");
 const ReviewRepository = require("./repositories/review_repository");
