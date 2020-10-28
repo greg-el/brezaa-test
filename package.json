@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [
     "heroku"
@@ -18,5 +18,9 @@
   },
   "engines": {
     "node": "12.x"
+  },
+  "devDependencies": {
+    "mocha": "^8.2.0",
+    "supertest": "^5.0.0"
   }
 }

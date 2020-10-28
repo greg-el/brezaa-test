@@ -74,14 +74,86 @@ class UserRepository {
   getAllSellers() {
     let out = [];
     for (let user of this.users) {
-      if (user.profession !== null) {
+      console.log(user.profession);
+      if (user.profession !== undefined) {
         out.push(user);
       }
     }
     return out;
   }
 
-  getClosestSeller() {}
+  haversineDistance(coords1, coords2) {
+    function toRad(x) {
+      return (x * Math.PI) / 180;
+    }
+
+    var lon1 = coords1[0];
+    var lat1 = coords1[1];
+
+    var lon2 = coords2[0];
+    var lat2 = coords2[1];
+
+    var R = 6371; // km
+
+    var x1 = lat2 - lat1;
+    var dLat = toRad(x1);
+    var x2 = lon2 - lon1;
+    var dLon = toRad(x2);
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+
+    return d;
+  }
+
+  coordToNum(c) {
+    let out = [];
+    for (let num of c) {
+      out.push(parseFloat(num.replace(",", ".")));
+    }
+    return out;
+  }
+
+  getNearestSeller(lat, long, maxDistance) {
+    let closest = {};
+    let maxDistNum = parseFloat(maxDistance);
+
+    for (let user of this.users) {
+      if (closest.latitude === undefined) {
+        console.log(
+          this.haversineDistance(
+            this.coordToNum([lat, long]),
+            this.coordToNum([user.latitude, user.longitude])
+          ) < maxDistNum
+        );
+        if (
+          this.haversineDistance(
+            this.coordToNum([lat, long]),
+            this.coordToNum([user.latitude, user.longitude])
+          ) < maxDistNum
+        ) {
+          closest = user;
+        }
+      } else if (
+        this.haversineDistance(
+          this.coordToNum([closest.latitude, closest.longitude]),
+          this.coordToNum([user.latitude, user.longitude])
+        ) >
+        this.haversineDistance(
+          this.coordToNum([lat, long]),
+          this.coordToNum([user.latitude, user.longitude])
+        )
+      ) {
+        closest = user;
+      }
+    }
+    return closest;
+  }
 }
 
 module.exports = UserRepository;

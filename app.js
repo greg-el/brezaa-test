@@ -87,6 +87,21 @@ app.post("/getSellerReviews/", (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}.`);
+app.post("/getNearestSellers/", (req, res) => {
+  let long = req.query.longitude;
+  let lat = req.query.latitude;
+  let maxDistance = req.query.maxDistance;
+  let seller = userRepository.getNearestSeller(lat, long, maxDistance);
+  if (seller) {
+    res.json(seller);
+  } else {
+    res.json("No sellers found.");
+  }
 });
+
+var server_port = process.env.PORT || 3000;
+var server_host = "0.0.0.0";
+server.listen(server_port, server_host, function () {
+  console.log("Listening on port %d", server_port);
+});
+app.listen(process.env.PORT || 3000);
